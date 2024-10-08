@@ -80,14 +80,13 @@ void MainWindow::StartRace(void){
 
 
     if(ui->rb_qtConcur->isChecked()){
-
-        ui->te_debug->append("Выполни ДЗ!");
-        //Тут должен быть код ДЗ
-
+        auto qtConcur1 = [this](){concurRace1->DoWork(&number, ui->rb_qtConcur->isChecked(), ui->sb_initNum->value());};
+        auto qtConcur2 = [this](){concurRace2->DoWork(&number, ui->rb_qtConcur->isChecked(), ui->sb_initNum->value());};
+        QtConcurrent::run(qtConcur1).then(qtConcur2);
     }
     else{
-        race1->operate(&number, ui->rb_mutexOn->isChecked(), ui->sb_initNum->value());
-        race2->operate(&number, ui->rb_mutexOn->isChecked(), ui->sb_initNum->value());
+        emit race1->operate(&number, ui->rb_mutexOn->isChecked(), ui->sb_initNum->value());
+        emit race2->operate(&number, ui->rb_mutexOn->isChecked(), ui->sb_initNum->value());
     }
 }
 
